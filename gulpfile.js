@@ -7,7 +7,16 @@ var gulp = require('gulp'),
   rename = require('gulp-rename'),
   browserify = require('gulp-browserify'),
   handlebars = require('gulp-handlebars'),
-  wrap = require('gulp-wrap');
+  wrap = require('gulp-wrap'),
+  less = require('gulp-less');
+
+gulp.task('less', function () {
+  return gulp.src('less/app.less')
+    .pipe(less({
+      paths: [ 'bower_components/bootstrap/less/' ]
+    }))
+    .pipe(gulp.dest('public/css/'));
+});
 
 gulp.task('templates', function () {
   return gulp.src('templates/**/*.hbs')

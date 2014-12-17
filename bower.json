@@ -19,7 +19,8 @@
     "jquery-ui": "~1.11.2",
     "underscore": "~1.7.0",
     "backbone": "~1.1.2",
-    "handlebars": "~2.0.0"
+    "handlebars": "~2.0.0",
+    "bootstrap": "~3.3.1"
   },
   "overrides": {
     "underscore": {
@@ -50,6 +51,12 @@
       "main": {
         "development": "handlebars.runtime.js",
         "production": "handlebars.runtime.min.js"
+      }
+    },
+    "bootstrap": {
+      "main": {
+        "development": "dist/js/bootstrap.js",
+        "production": "dist/js/bootstrap.min.js"
       }
     }
   }
