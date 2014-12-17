@@ -4,7 +4,16 @@ var gulp = require('gulp'),
   concat = require('gulp-concat'),
   mbf = require('main-bower-files'),
   uglify = require('gulp-uglify'),
-  rename = require('gulp-rename');
+  rename = require('gulp-rename'),
+  browserify = require('gulp-browserify');
+
+gulp.task('browserify', function () {
+  return gulp.src(['client/app.js'])
+    .pipe(browserify({
+      debug: true
+    }))
+    .pipe(gulp.dest('public/js/'));
+});
 
 gulp.task('vendor', function (cb) {
   // create missing minified ashkenas scripts
