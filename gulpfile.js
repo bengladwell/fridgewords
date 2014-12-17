@@ -8,7 +8,8 @@ var gulp = require('gulp'),
   browserify = require('gulp-browserify'),
   handlebars = require('gulp-handlebars'),
   wrap = require('gulp-wrap'),
-  less = require('gulp-less');
+  less = require('gulp-less'),
+  livereload = require('gulp-livereload');
 
 gulp.task('less', function () {
   return gulp.src('less/app.less')
@@ -50,4 +51,12 @@ gulp.task('bower', ['vendor'], function () {
   gulp.src(mbf().filter(function (f) { return f.substr(-2) === 'js'; }))
     .pipe(concat(process.env.NODE_ENV === 'development' ? 'vendor.js' : 'vendor.min.js'))
     .pipe(gulp.dest('public/js/'));
+});
+
+gulp.task('watch', ['browserify', 'less'], function () {
+  gulp.watch(['client/**/*.js'], [ 'browserify' ]);
+  gulp.watch('less/**/*.less', [ 'less' ]);
+  gulp.watch('templates/**/*.hbs', [ 'templates' ]);
+  livereload.listen();
+  gulp.watch('public/**').on('change', livereload.changed);
 });
