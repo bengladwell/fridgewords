@@ -18,7 +18,9 @@
     },
 
     game: function () {
-      this.layout.setView(new GameView());
+      this.layout.setView(new GameView({
+        available: new Backbone.Collection()
+      }));
     },
 
     settings: function () {
