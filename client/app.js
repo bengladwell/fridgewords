@@ -11,6 +11,9 @@
       router = new AppRouter({
         layout: layoutView
       });
+
+    $('body').append(layoutView.render().el);
+
     if (!Backbone.history.start({pushState: true})) {
       router.navigate("", {trigger: true});
     }

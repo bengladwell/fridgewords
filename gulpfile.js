@@ -5,9 +5,18 @@ var gulp = require('gulp'),
   mbf = require('main-bower-files'),
   uglify = require('gulp-uglify'),
   rename = require('gulp-rename'),
-  browserify = require('gulp-browserify');
+  browserify = require('gulp-browserify'),
+  handlebars = require('gulp-handlebars'),
+  wrap = require('gulp-wrap');
 
-gulp.task('browserify', function () {
+gulp.task('templates', function () {
+  return gulp.src('templates/**/*.hbs')
+    .pipe(handlebars())
+    .pipe(wrap('module.exports = Handlebars.template(<%= contents %>);'))
+    .pipe(gulp.dest('client/templates/'));
+});
+
+gulp.task('browserify', ['templates'], function () {
   return gulp.src(['client/app.js'])
     .pipe(browserify({
       debug: true

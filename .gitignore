@@ -4,3 +4,5 @@ bower_components
 
 public/js/vendor*
 public/js/app.js
+
+client/templates

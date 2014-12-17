@@ -18,7 +18,8 @@
   "dependencies": {
     "jquery-ui": "~1.11.2",
     "underscore": "~1.7.0",
-    "backbone": "~1.1.2"
+    "backbone": "~1.1.2",
+    "handlebars": "~2.0.0"
   },
   "overrides": {
     "underscore": {
@@ -43,6 +44,12 @@
       "main": {
         "production": "dist/jquery.min.js",
         "development": "dist/jquery.js"
+      }
+    },
+    "handlebars": {
+      "main": {
+        "development": "handlebars.runtime.js",
+        "production": "handlebars.runtime.min.js"
       }
     }
   }
