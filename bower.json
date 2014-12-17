@@ -1,0 +1,49 @@
+{
+  "name": "fridgewords",
+  "main": "index.js",
+  "version": "0.0.1",
+  "homepage": "https://github.com/bengladwell/fridgewords",
+  "authors": [
+    "Ben Gladwell <bengladwell@gmail.com>"
+  ],
+  "description": "A a project for CodeMash 2014 to demonstrate frontend organization with gulp.js",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery-ui": "~1.11.2",
+    "underscore": "~1.7.0",
+    "backbone": "~1.1.2"
+  },
+  "overrides": {
+    "underscore": {
+      "main": {
+        "development": "underscore.js",
+        "production": "underscore.min.js"
+      }
+    },
+    "backbone": {
+      "main": {
+        "development": "backbone.js",
+        "production": "backbone.min.js"
+      }
+    },
+    "jquery-ui": {
+      "main": {
+        "production": "jquery-ui.min.js",
+        "development": "jquery-ui.js"
+      }
+    },
+    "jquery": {
+      "main": {
+        "production": "dist/jquery.min.js",
+        "development": "dist/jquery.js"
+      }
+    }
+  }
+}
