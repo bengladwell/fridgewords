@@ -37,6 +37,7 @@
     remove: function () {
       this.addWordView.remove();
       this.availableWordsView.remove();
+      this.phrasesView.remove();
       Backbone.View.prototype.remove.apply(this, arguments);
     }
 

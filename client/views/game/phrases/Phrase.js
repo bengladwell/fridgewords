@@ -16,17 +16,20 @@
       }
     },
 
+    views: [],
+
     render: function () {
       this.$el.append('<a href="#" class="close"><span class="pull-right glyphicon glyphicon-remove-circle"></span></a>');
       if (!this.model.words.length) {
         this.addNewText();
       }
       this.model.words.each(function (m) {
-        // we're not keeping references to the WordViews for remove/cleanup;
-        // assuming there will be no need to unbind listeners and such; probably a mistake :)
-        this.$el.append(new WordView({model: m}).render().el);
+        var wordView = new WordView({model: m});
+        this.views.push(wordView);
+        this.$el.append(wordView.render().el);
       }, this);
 
+      // memory leak; $.sortable seems to prevent this view from being GC'd regardless of options
       this.$el.sortable({
         connectWith: '.available-words,.phrase',
         update: _.bind(function () {
@@ -52,6 +55,15 @@
 
     addNewText: function () {
       this.$el.prepend('<span class="new">Drag words here to start a new phrase</span>');
+    },
+
+    remove: function () {
+      _.each(this.views, function (view) {
+        view.remove();
+      }, this);
+      // the destroy method doesn't seem to work; this view will not be GC'd (according to Backbone Chrome dev tool extension)
+      this.$el.sortable('destroy');
+      Backbone.View.prototype.remove.apply(this, arguments);
     }
 
   });

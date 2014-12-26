@@ -31,9 +31,12 @@
       if (!this.collection.length) {
         this.addNewText();
       }
+
       _.each(this.wordViews, function (v) {
         this.$el.append(v.render().el);
       }, this);
+
+      // memory leak; $.sortable seems to prevent this view from being GC'd regardless of options
       this.$el.sortable({
         update: _.bind(function () {
           if (!this.collection.length) {
@@ -60,6 +63,8 @@
       _.each(this.wordViews, function (v) {
         v.remove();
       }, this);
+      // the destroy method doesn't seem to work; this view will not be GC'd (according to Backbone Chrome dev tool extension)
+      this.$el.sortable('destroy');
       Backbone.View.prototype.remove.apply(this, arguments);
     },
 
