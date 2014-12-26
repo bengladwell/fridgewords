@@ -1,4 +1,5 @@
 @import "bootstrap.less";
+@icon-font-path: "../fonts/vendor/bootstrap/";
 
 .page-header {
   h1 {
@@ -15,6 +16,7 @@
     border: 1px solid #ccc;
     color: #fff;
     text-shadow: 1px 1px 1px #999;
+    cursor: pointer;
   }
   .add-word {
     .center-block;
@@ -22,6 +24,25 @@
   }
   .available-words {
     .center-block;
+    min-height: 100px;
     width: 70%;
+    .new {
+      color: #CCC;
+    }
+  }
+  .phrases {
+    .center-block;
+    width: 70%;
+    .phrase {
+      .new {
+        color: #CCC;
+      }
+      .close {
+        color: #444;
+      }
+    }
+    .drop-here {
+      box-shadow: 1px 1px 1px 1px @brand-primary;
+    }
   }
 }

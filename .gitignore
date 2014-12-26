@@ -5,5 +5,6 @@ bower_components
 public/js/vendor*
 public/js/app.js
 public/css/app.css
+public/fonts/vendor
 
 client/templates

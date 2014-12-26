@@ -1,30 +1,35 @@
 (function () {
   "use strict";
 
-  var _ = window._,
-    Backbone = window.Backbone,
+  var Backbone = window.Backbone,
     AddWordView = require('./game/AddWord'),
-    AvailableWordsView = require('./game/AvailableWords');
+    AvailableWordsView = require('./game/AvailableWords'),
+    PhrasesView = require('./game/Phrases');
 
   module.exports = Backbone.View.extend({
 
     className: 'game',
 
     initialize: function (options) {
-      _.extend(this, _.pick(options, 'available'));
 
       this.addWordView = new AddWordView({
-        collection: this.available
+        collection: options.available
       });
 
       this.availableWordsView = new AvailableWordsView({
-        collection: this.available
+        collection: options.available
+      });
+
+      this.phrasesView = new PhrasesView({
+        collection: options.phrases,
+        available: options.available
       });
     },
 
     render: function () {
       this.$el.append(this.addWordView.render().el)
-        .append(this.availableWordsView.render().el);
+        .append(this.availableWordsView.render().el)
+        .append(this.phrasesView.render().el);
       return this;
     },
 

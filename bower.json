@@ -20,7 +20,8 @@
     "underscore": "~1.7.0",
     "backbone": "~1.1.2",
     "handlebars": "~2.0.0",
-    "bootstrap": "~3.3.1"
+    "bootstrap": "~3.3.1",
+    "backbone.localStorage": "~1.1.14"
   },
   "overrides": {
     "underscore": {
@@ -59,5 +60,8 @@
         "production": "dist/js/bootstrap.min.js"
       }
     }
+  },
+  "resolutions": {
+    "backbone": "~1.1.2"
   }
 }

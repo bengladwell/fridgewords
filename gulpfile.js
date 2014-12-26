@@ -35,6 +35,7 @@ gulp.task('browserify', ['templates'], function () {
 });
 
 gulp.task('vendor', function (cb) {
+
   // create missing minified ashkenas scripts
   gulp.src('bower_components/underscore/underscore.js')
     .pipe(uglify())
@@ -44,6 +45,11 @@ gulp.task('vendor', function (cb) {
     .pipe(uglify())
     .pipe(rename('backbone.min.js'))
     .pipe(gulp.dest('bower_components/backbone/'));
+
+  // bootstrap fonts
+  gulp.src('bower_components/bootstrap/fonts/*')
+    .pipe(gulp.dest('public/fonts/vendor/bootstrap/'));
+
   cb();
 });
 

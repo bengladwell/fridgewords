@@ -13,7 +13,7 @@
     events: {
       'submit': function (e) {
         e.preventDefault();
-        this.collection.add({label: this.$('input').val()});
+        this.collection.add({label: this.$('input').val().trim()});
         this.$('input').val('');
       }
     },

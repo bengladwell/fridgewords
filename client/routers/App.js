@@ -4,7 +4,9 @@
   var _ = window._,
     Backbone = window.Backbone,
     GameView = require('../views/Game'),
-    SettingsView = require('../views/Settings');
+    SettingsView = require('../views/Settings'),
+    AvailableWordsCollection = require('../collections/AvailableWords'),
+    PhrasesCollection = require('../collections/Phrases');
 
   module.exports = Backbone.Router.extend({
 
@@ -18,9 +20,17 @@
     },
 
     game: function () {
+      var availableWordsCollection = new AvailableWordsCollection(),
+        phrasesCollection = new PhrasesCollection();
+
+      availableWordsCollection.fetch();
+      phrasesCollection.fetch();
+
       this.layout.setView(new GameView({
-        available: new Backbone.Collection()
+        available: availableWordsCollection,
+        phrases: phrasesCollection
       }));
+
     },
 
     settings: function () {
