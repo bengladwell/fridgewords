@@ -1,12 +1,26 @@
 (function () {
   "use strict";
 
-  var Backbone = window.Backbone;
+  var Backbone = window.Backbone,
+    template = require('../templates/settings'),
+    View;
 
-  module.exports = Backbone.View.extend({
+  View = Backbone.View.extend({
 
-    className: 'settings'
+    className: 'settings',
+
+    render: function () {
+      this.$el.html(template());
+      return this;
+    }
 
   });
+
+  View.linkTo = {
+    href: "",
+    text: "Game"
+  };
+
+  module.exports = View;
 
 }());

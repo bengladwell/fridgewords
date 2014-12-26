@@ -29,12 +29,12 @@
       this.layout.setView(new GameView({
         available: availableWordsCollection,
         phrases: phrasesCollection
-      }));
+      }), { linkTo: GameView.linkTo });
 
     },
 
     settings: function () {
-      this.layout.setView(new SettingsView());
+      this.layout.setView(new SettingsView(), { linkTo: SettingsView.linkTo });
     }
 
   });

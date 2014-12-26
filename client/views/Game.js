@@ -4,9 +4,10 @@
   var Backbone = window.Backbone,
     AddWordView = require('./game/AddWord'),
     AvailableWordsView = require('./game/AvailableWords'),
-    PhrasesView = require('./game/Phrases');
+    PhrasesView = require('./game/Phrases'),
+    View;
 
-  module.exports = Backbone.View.extend({
+  View = Backbone.View.extend({
 
     className: 'game',
 
@@ -40,5 +41,12 @@
     }
 
   });
+
+  View.linkTo = {
+    href: "settings",
+    text: "Settings"
+  };
+
+  module.exports = View;
 
 }());
