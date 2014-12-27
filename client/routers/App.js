@@ -23,13 +23,14 @@
       var availableWordsCollection = new AvailableWordsCollection(),
         phrasesCollection = new PhrasesCollection();
 
-      availableWordsCollection.fetch();
-      phrasesCollection.fetch();
+      Backbone.$.when([availableWordsCollection.fetch(), phrasesCollection.fetch()]).then(_.bind(function () {
 
-      this.layout.setView(new GameView({
-        available: availableWordsCollection,
-        phrases: phrasesCollection
-      }), { linkTo: GameView.linkTo });
+        this.layout.setView(new GameView({
+          available: availableWordsCollection,
+          phrases: phrasesCollection
+        }), { linkTo: GameView.linkTo });
+
+      }, this));
 
     },
 
