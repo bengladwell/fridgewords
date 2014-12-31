@@ -12,7 +12,7 @@ var gulp = require('gulp'),
   livereload = require('gulp-livereload');
 
 gulp.task('less', function () {
-  return gulp.src('less/app.less')
+  return gulp.src('src/less/app.less')
     .pipe(less({
       paths: [ 'bower_components/bootstrap/less/' ]
     }))
@@ -20,14 +20,14 @@ gulp.task('less', function () {
 });
 
 gulp.task('templates', function () {
-  return gulp.src('templates/**/*.hbs')
+  return gulp.src('src/hbs/**/*.hbs')
     .pipe(handlebars())
     .pipe(wrap('module.exports = Handlebars.template(<%= contents %>);'))
-    .pipe(gulp.dest('client/templates/'));
+    .pipe(gulp.dest('src/js/templates/'));
 });
 
 gulp.task('browserify', ['templates'], function () {
-  return gulp.src(['client/app.js'])
+  return gulp.src(['src/js/app.js'])
     .pipe(browserify({
       debug: true
     }))
@@ -60,9 +60,9 @@ gulp.task('bower', ['vendor'], function () {
 });
 
 gulp.task('watch', ['browserify', 'less'], function () {
-  gulp.watch(['client/**/*.js'], [ 'browserify' ]);
-  gulp.watch('less/**/*.less', [ 'less' ]);
-  gulp.watch('templates/**/*.hbs', [ 'templates' ]);
+  gulp.watch(['src/js/**/*.js'], [ 'browserify' ]);
+  gulp.watch('src/less/**/*.less', [ 'less' ]);
+  gulp.watch('src/hbs/**/*.hbs', [ 'templates' ]);
   livereload.listen();
   gulp.watch('public/**').on('change', livereload.changed);
 });

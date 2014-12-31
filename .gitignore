@@ -7,4 +7,4 @@ public/js/app.js
 public/css/app.css
 public/fonts/vendor
 
-client/templates
+src/js/templates
