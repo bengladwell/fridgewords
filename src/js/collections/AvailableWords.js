@@ -1,12 +1,9 @@
-(function () {
-  "use strict";
+"use strict";
 
-  var Backbone = window.Backbone;
+var Backbone = window.Backbone;
 
-  module.exports = Backbone.Collection.extend({
+module.exports = Backbone.Collection.extend({
 
-    localStorage: new Backbone.LocalStorage('Available')
+  localStorage: new Backbone.LocalStorage('Available')
 
-  });
-
-}());
+});
