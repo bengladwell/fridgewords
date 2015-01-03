@@ -9,7 +9,15 @@ var gulp = require('gulp'),
   handlebars = require('gulp-handlebars'),
   wrap = require('gulp-wrap'),
   less = require('gulp-less'),
-  livereload = require('gulp-livereload');
+  livereload = require('gulp-livereload'),
+  jshint = require('gulp-jshint');
+
+gulp.task('jshint', function () {
+  return gulp.src(['src/js/**/*.js', '!src/js/templates/**/*.js'])
+    .pipe(jshint(process.env.NODE_ENV === 'development' ? {devel: true, debug: true} : {}))
+    .pipe(jshint.reporter('jshint-stylish'))
+    .pipe(jshint.reporter('fail'));
+});
 
 gulp.task('less', function () {
   return gulp.src('src/less/app.less')
@@ -26,7 +34,22 @@ gulp.task('templates', function () {
     .pipe(gulp.dest('src/js/templates/'));
 });
 
-gulp.task('browserify', ['templates'], function () {
+gulp.task('browserify', ['jshint', 'templates'], function () {
+  if (process.env.NODE_ENV === 'development') {
+    return gulp.src(['src/js/app.js'])
+      .pipe(browserify({
+        debug: true
+      }))
+      .pipe(gulp.dest('public/js/'));
+  }
+
+  // else not development
+  return gulp.src(['src/js/app.js'])
+    .pipe(browserify())
+    .pipe(gulp.dest('public/js/'));
+});
+
+gulp.task('browserify-no-templates', ['jshint'], function () {
   return gulp.src(['src/js/app.js'])
     .pipe(browserify({
       debug: true
