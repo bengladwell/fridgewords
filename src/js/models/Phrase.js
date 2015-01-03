@@ -14,7 +14,6 @@ module.exports = Backbone.Model.extend({
   },
 
   parse: function (data, options) {
-    //this.words.set(JSON.parse(data.words), options);
     this.words.set(data.words, options);
     return _.omit(data, 'words');
   },

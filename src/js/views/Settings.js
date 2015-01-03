@@ -15,22 +15,26 @@ View = Backbone.View.extend({
   events: {
     submit: function (e) {
       e.preventDefault();
-
-      var words = new AvailableWordsCollection(_.map(this.$('textarea').val().split(/\n/), function (token) {
-        return { label: token.trim() };
-      }));
-
-      Backbone.$.when(words.map(function (word) {
-        word.save();
-      })).then(function () {
-        Backbone.history.navigate("", {trigger: true});
-      });
+      this.submit();
     }
   },
 
   render: function () {
     this.$el.html(template());
     return this;
+  },
+
+  submit: function () {
+    var words = new AvailableWordsCollection(_.map(this.$('textarea').val().split(/\n/), function (token) {
+      return { label: token.trim() };
+    }));
+
+    // return promise for testing
+    return Backbone.$.when(words.map(function (word) {
+      word.save();
+    })).then(function () {
+      Backbone.history.navigate("", {trigger: true});
+    });
   }
 
 });

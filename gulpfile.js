@@ -57,6 +57,21 @@ gulp.task('browserify-no-templates', ['jshint'], function () {
     .pipe(gulp.dest('public/js/'));
 });
 
+gulp.task('tests', function () {
+  return gulp.src([ 'src/js/tests/**/*.js' ])
+    .pipe(jshint({devel: true, debug: true}))
+    .pipe(jshint.reporter('jshint-stylish'))
+    .pipe(jshint.reporter('fail'))
+    // putting all of our tests together in a single file like this prevents dependency duplication when browserified;
+    // it also messes up require(...) relative paths; all paths assumed to begin from src/js/tests/
+    .pipe(concat('tests.js'))
+    .pipe(wrap('var expect = window.chai.expect; <%= contents %>'))
+    .pipe(browserify({
+      debug: true
+    }))
+    .pipe(gulp.dest('tmp/'));
+});
+
 gulp.task('vendor', function (cb) {
 
   // create missing minified ashkenas scripts
@@ -82,8 +97,9 @@ gulp.task('bower', ['vendor'], function () {
     .pipe(gulp.dest('public/js/'));
 });
 
-gulp.task('watch', ['browserify', 'less'], function () {
-  gulp.watch(['src/js/**/*.js'], [ 'browserify' ]);
+gulp.task('watch', ['browserify', 'less', 'tests'], function () {
+  gulp.watch(['src/js/**/*.js', '!src/js/tests/**/*.js'], [ 'browserify-no-templates', 'tests' ]);
+  gulp.watch('src/js/tests/**/*.js', [ 'tests' ]);
   gulp.watch('src/less/**/*.less', [ 'less' ]);
   gulp.watch('src/hbs/**/*.hbs', [ 'templates' ]);
   livereload.listen();

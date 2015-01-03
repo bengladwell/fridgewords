@@ -1,6 +1,7 @@
 *.swp
 node_modules
 bower_components
+tmp
 
 public/js/vendor*
 public/js/app.js
