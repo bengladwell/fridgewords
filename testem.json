@@ -2,8 +2,6 @@
   "framework": "mocha",
   "src_files": [
     "public/js/vendor.js",
-    "node_modules/chai/chai.js",
-    "node_modules/sinon/pkg/sinon.js",
-    "tmp/tests.js"
+    "tmp/**/*.js"
   ]
 }

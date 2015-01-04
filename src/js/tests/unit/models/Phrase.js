@@ -1,9 +1,8 @@
 describe('models/Phrase', function () {
   "use strict";
 
-  // because of how we are building tests, relative paths are broken for require statements;
-  // see note in gulpfile.js in tests task
-  var PhraseModel = require('../models/Phrase'),
+  var expect = require('chai').expect,
+    PhraseModel = require('../../../models/Phrase'),
     phraseModel;
 
   beforeEach(function () {

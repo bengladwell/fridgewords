@@ -1,9 +1,11 @@
 describe('views/Game', function () {
   "use strict";
 
-  var GameView = require('../views/Game'),
-    AvailableWordsCollection = require('../collections/AvailableWords'),
-    PhrasesCollection = require('../collections/Phrases'),
+  var expect = require('chai').expect,
+    sinon = require('sinon'),
+    GameView = require('../../../views/Game'),
+    AvailableWordsCollection = require('../../../collections/AvailableWords'),
+    PhrasesCollection = require('../../../collections/Phrases'),
     gameView;
 
   beforeEach(function () {

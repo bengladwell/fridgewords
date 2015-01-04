@@ -5,12 +5,14 @@ var gulp = require('gulp'),
   mbf = require('main-bower-files'),
   uglify = require('gulp-uglify'),
   rename = require('gulp-rename'),
-  browserify = require('gulp-browserify'),
+  browserify = require('browserify'),
+  transform = require('vinyl-transform'),
   handlebars = require('gulp-handlebars'),
   wrap = require('gulp-wrap'),
   less = require('gulp-less'),
   livereload = require('gulp-livereload'),
-  jshint = require('gulp-jshint');
+  jshint = require('gulp-jshint'),
+  plumber = require('gulp-plumber');
 
 gulp.task('jshint', function () {
   return gulp.src(['src/js/**/*.js', '!src/js/templates/**/*.js'])
@@ -21,6 +23,7 @@ gulp.task('jshint', function () {
 
 gulp.task('less', function () {
   return gulp.src('src/less/app.less')
+    .pipe(plumber())
     .pipe(less({
       paths: [ 'bower_components/bootstrap/less/' ]
     }))
@@ -29,6 +32,7 @@ gulp.task('less', function () {
 
 gulp.task('templates', function () {
   return gulp.src('src/hbs/**/*.hbs')
+    .pipe(plumber())
     .pipe(handlebars())
     .pipe(wrap('module.exports = Handlebars.template(<%= contents %>);'))
     .pipe(gulp.dest('src/js/templates/'));
@@ -37,22 +41,33 @@ gulp.task('templates', function () {
 gulp.task('browserify', ['jshint', 'templates'], function () {
   if (process.env.NODE_ENV === 'development') {
     return gulp.src(['src/js/app.js'])
-      .pipe(browserify({
-        debug: true
+      .pipe(plumber())
+      .pipe(transform(function (f) {
+        return browserify({
+          entries: f,
+          debug: true
+        }).bundle();
       }))
       .pipe(gulp.dest('public/js/'));
   }
 
   // else not development
   return gulp.src(['src/js/app.js'])
-    .pipe(browserify())
+    .pipe(transform(function (f) {
+      return browserify(f).bundle();
+    }))
+    .pipe(uglify())
     .pipe(gulp.dest('public/js/'));
 });
 
 gulp.task('browserify-no-templates', ['jshint'], function () {
   return gulp.src(['src/js/app.js'])
-    .pipe(browserify({
-      debug: true
+    .pipe(plumber())
+    .pipe(transform(function (f) {
+      return browserify({
+        entries: f,
+        debug: true
+      }).bundle();
     }))
     .pipe(gulp.dest('public/js/'));
 });
@@ -62,12 +77,12 @@ gulp.task('tests', function () {
     .pipe(jshint({devel: true, debug: true}))
     .pipe(jshint.reporter('jshint-stylish'))
     .pipe(jshint.reporter('fail'))
-    // putting all of our tests together in a single file like this prevents dependency duplication when browserified;
-    // it also messes up require(...) relative paths; all paths assumed to begin from src/js/tests/
-    .pipe(concat('tests.js'))
-    .pipe(wrap('var expect = window.chai.expect; <%= contents %>'))
-    .pipe(browserify({
-      debug: true
+    .pipe(plumber())
+    .pipe(transform(function (f) {
+      return browserify({
+        entries: f,
+        debug: true
+      }).bundle();
     }))
     .pipe(gulp.dest('tmp/'));
 });

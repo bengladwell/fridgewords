@@ -1,12 +1,11 @@
 describe('routers/App', function () {
   "use strict";
 
-  // because of how we are building tests, relative paths are broken for require statements;
-  // see note in gulpfile.js in tests task
-  var AppRouter = require('../routers/App'),
-    LayoutView = require('../views/Layout'),
-    GameView = require('../views/Game'),
-    SettingsView = require('../views/Settings'),
+  var expect = require('chai').expect,
+    AppRouter = require('../../../routers/App'),
+    LayoutView = require('../../../views/Layout'),
+    GameView = require('../../../views/Game'),
+    SettingsView = require('../../../views/Settings'),
     router;
 
   beforeEach(function () {

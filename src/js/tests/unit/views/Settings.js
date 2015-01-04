@@ -1,8 +1,10 @@
 describe('views/Settings', function () {
   "use strict";
 
-  var Backbone = window.Backbone,
-    SettingsView = require('../views/Settings'),
+  var expect = require('chai').expect,
+    sinon = require('sinon'),
+    Backbone = window.Backbone,
+    SettingsView = require('../../../views/Settings'),
     settingsView;
 
   beforeEach(function () {

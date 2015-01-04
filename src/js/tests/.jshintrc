@@ -66,8 +66,6 @@
       "require",
       "exports",
       "module",
-      "expect",
-      "sinon",
       "describe",
       "before",
       "after",
