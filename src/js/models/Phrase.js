@@ -13,6 +13,14 @@ module.exports = Backbone.Model.extend({
 
   },
 
+  initialize: function () {
+    this.words.on('add', function (word) {
+      if (this.words.length === 1) {
+        this.collection.trigger('new', this, word);
+      }
+    }, this);
+  },
+
   parse: function (data, options) {
     this.words.set(data.words, options);
     return _.omit(data, 'words');

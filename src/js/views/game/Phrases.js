@@ -20,21 +20,19 @@ module.exports = Backbone.View.extend({
         v.remove();
       }
     });
+    this.listenTo(this.collection, 'new', function () {
+      if (this.collection.every(function (phrase) { return phrase.words.length; })) {
+        var v = new PhraseView({
+          model: this.collection.add({})
+        });
+        this.views.push(v);
+        this.$el.append(v.render().el);
+      }
+    });
   },
 
   render: function () {
     this.collection.each(function (m) {
-
-      // add a new empty phrase if there are none left
-      this.listenTo(m.words, 'add', function () {
-        if (m.words.length === 1 && this.collection.every(function (phrase) { return phrase.words.length; })) {
-          var v = new PhraseView({
-            model: this.collection.add({})
-          });
-          this.views.push(v);
-          this.$el.append(v.render().el);
-        }
-      });
 
       var phraseView = new PhraseView({
         model: m
