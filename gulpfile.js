@@ -105,3 +105,5 @@ gulp.task('watch', ['browserify', 'less', 'tests'], function () {
   livereload.listen();
   gulp.watch('public/**').on('change', livereload.changed);
 });
+
+gulp.task('default', ['bower', 'browserify', 'less']);
