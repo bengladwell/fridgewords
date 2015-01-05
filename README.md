@@ -2,6 +2,15 @@ fridgewords
 ===========
 A project created for [CodeMash 2015](http://www.codemash.org/) to demostrate frontend organization with gulp.js.
 
+Concepts illustrated include
+* using CommonJS modules for frontend code
+* automatically including Bower assets, loaded in dependency order
+* conditionally minifying js assets based on environment
+* integrating Bootstrap
+* automatic builds and livereload
+
+The slides used to describe the concepts above are in [this repo](https://github.com/bengladwell/codemash2015).
+
 Install and run
 ------------
 If you don't have bower and gulp installed globally, install those:
