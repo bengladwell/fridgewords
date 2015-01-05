@@ -18,12 +18,12 @@ bower install
 
 Compile assets
 ```bash
-gulp
+NODE_ENV=development gulp
 ```
 
 Run the node server
 ```bash
-node index.js
+NODE_ENV=development node index.js
 ```
 
 Both `gulp` and `node index.js` respect the NODE_ENV environment variable. Setting it to development will produce unminified assets and source maps.
