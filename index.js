@@ -15,7 +15,7 @@ app.set('view engine', 'hbs');
 app.use(serveStatic(__dirname + '/public'));
 
 // if $NODE_ENV=development, inject the live-reload js snippet tag
-if (app.get('env') === 'development') {
+if (process.env.NODE_ENV === 'development') {
   app.use(require('connect-livereload')());
 }
 
@@ -23,7 +23,7 @@ if (app.get('env') === 'development') {
 app.get('/*', function (req, res, next) {
   // server/views/app.hbs will have an isDev variable
   res.render('app', {
-    isDev: app.get('env') === 'development'
+    isDev: process.env.NODE_ENV === 'development'
   });
 });
 

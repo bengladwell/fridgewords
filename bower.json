@@ -36,6 +36,12 @@
         "production": "backbone.min.js"
       }
     },
+    "backbone.localStorage": {
+      "main": {
+        "development": "backbone.localStorage.js",
+        "production": "backbone.localStorage-min.js"
+      }
+    },
     "jquery-ui": {
       "main": {
         "production": "jquery-ui.min.js",
