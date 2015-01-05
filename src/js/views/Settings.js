@@ -29,7 +29,7 @@ View = Backbone.View.extend({
       return { label: token.trim() };
     }));
 
-    // return promise for testing
+    // return the promise for testing
     return Backbone.$.when(words.map(function (word) {
       word.save();
     })).then(function () {
@@ -39,6 +39,8 @@ View = Backbone.View.extend({
 
 });
 
+// "class" variables; other classes need only to require this class (but not instantiate it)
+// to get access to these
 View.linkTo = {
   href: "",
   text: "Game"

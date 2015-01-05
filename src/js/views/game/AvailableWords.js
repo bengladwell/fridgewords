@@ -9,6 +9,7 @@ module.exports = Backbone.View.extend({
   className: 'available-words well',
 
   initialize: function () {
+    // maintain a collection of subviews so that we can remove them in our remove method
     this.wordViews = this.collection.map(function (m) {
       return new WordView({model: m});
     }, this);
@@ -16,6 +17,7 @@ module.exports = Backbone.View.extend({
     // new word generated from input
     this.listenTo(this.collection, 'add', function (m) {
       m.save();
+      // create and append a new WordView
       var v = new WordView({model: m});
       this.wordViews.push(v);
       if (this.collection.length === 1) {
@@ -41,6 +43,8 @@ module.exports = Backbone.View.extend({
         if (!this.collection.length) {
           this.$('.new').remove();
         }
+        // each time an update event is triggered in response to a sort or a word being dragged in or out,
+        // destroy all words in the collection and create new ones
         _.each(this.collection.pluck('id'), function (id) {
           this.collection.get(id).destroy();
         }, this);
@@ -49,6 +53,7 @@ module.exports = Backbone.View.extend({
             label: el.innerText
           }, { silent: true });
         }, this);
+
         if (!this.$('.word').length) {
           this.addNewText();
         }
@@ -62,7 +67,8 @@ module.exports = Backbone.View.extend({
     _.each(this.wordViews, function (v) {
       v.remove();
     }, this);
-    // the destroy method doesn't seem to work; this view will not be GC'd (according to Backbone Chrome dev tool extension)
+    // the jquery-ui destroy method doesn't seem to work;
+    // this view will not be GC'd (according to the Backbone Chrome dev tool extension)
     this.$el.sortable('destroy');
     Backbone.View.prototype.remove.apply(this, arguments);
   },

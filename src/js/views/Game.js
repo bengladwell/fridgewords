@@ -33,6 +33,8 @@ View = Backbone.View.extend({
     return this;
   },
 
+  // clean up after ourselves so that we can be properly GC'd;
+  // the main concern is to make sure all subviews stopListening() to models/collections
   remove: function () {
     this.addWordView.remove();
     this.availableWordsView.remove();
@@ -42,6 +44,8 @@ View = Backbone.View.extend({
 
 });
 
+// "class" variables; other classes need only to require this class (but not instantiate it)
+// to get access to these
 View.linkTo = {
   href: "settings",
   text: "Settings"

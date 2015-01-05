@@ -35,6 +35,9 @@ module.exports = Backbone.View.extend({
         if (!this.model.words.length) {
           this.$('.new').remove();
         }
+        // each time an update event is triggered in response to a sort or a word being dragged in or out,
+        // reset the words collection with the words in the view;
+        // the words are saved as a property of this PhraseModel, so we don't need to destroy/save them individually
         this.model.words.reset(_.map(this.$('.word'), function (el) {
           return {
             label: el.innerText
@@ -60,7 +63,8 @@ module.exports = Backbone.View.extend({
     _.each(this.views, function (view) {
       view.remove();
     }, this);
-    // the destroy method doesn't seem to work; this view will not be GC'd (according to Backbone Chrome dev tool extension)
+    // the jquery-ui destroy method doesn't seem to work;
+    // this view will not be GC'd (according to the Backbone Chrome dev tool extension)
     this.$el.sortable('destroy');
     Backbone.View.prototype.remove.apply(this, arguments);
   }

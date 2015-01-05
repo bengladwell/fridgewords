@@ -22,7 +22,7 @@ module.exports = Backbone.Router.extend({
     var availableWordsCollection = new AvailableWordsCollection(),
       phrasesCollection = new PhrasesCollection();
 
-    // return a Promise for testing
+    // return the Promise for testing
     return Backbone.$.when([availableWordsCollection.fetch(), phrasesCollection.fetch()]).then(_.bind(function () {
 
       this.layout.setView(new GameView({

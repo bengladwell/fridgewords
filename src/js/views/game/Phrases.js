@@ -1,5 +1,7 @@
 "use strict";
 
+// contains one or more PhraseViews
+
 var _ = window._,
   Backbone = window.Backbone,
   PhraseView = require('./phrases/Phrase');
@@ -11,15 +13,21 @@ module.exports = Backbone.View.extend({
   views: [],
 
   initialize: function () {
+    // if the backing collection is empty, create an empty Phrase (model)
     if (!this.collection.length || this.collection.last().words.length) {
       this.collection.add({});
     }
+
+    // when a phrase model is destroyed, find and remove the associated PhraseView
     this.listenTo(this.collection, 'destroy', function (phrase) {
       var v = _.findWhere(this.views, {model: phrase});
       if (v) {
         v.remove();
       }
     });
+
+    // when a PhraseModel goes from 0 to 1 word, add an empty PhraseView;
+    // see src/js/models/Phrase.js where the new event is triggered
     this.listenTo(this.collection, 'new', function () {
       if (this.collection.every(function (phrase) { return phrase.words.length; })) {
         var v = new PhraseView({

@@ -7,6 +7,8 @@ module.exports = Backbone.Model.extend({
 
   constructor: function () {
 
+    // standard pattern for nesting a collection within a model;
+    // see parse() and toJSON() below as well as http://backbonejs.org/#Model-constructor
     this.words = new Backbone.Collection();
 
     Backbone.Model.apply(this, arguments);
@@ -14,6 +16,8 @@ module.exports = Backbone.Model.extend({
   },
 
   initialize: function () {
+    // each phrase should notify it's containing Phrases collection when it has gone from
+    // 0 to 1 words
     this.words.on('add', function (word) {
       if (this.words.length === 1) {
         this.collection.trigger('new', this, word);

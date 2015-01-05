@@ -22,7 +22,6 @@ module.exports = Backbone.View.extend({
   ],
 
   render: function () {
-    this.$el.data('model-cid', this.model.cid);
     this.$el.html(template(this.model.toJSON()));
     this.$el.css('background-color', this.color || this.colors[Math.floor(Math.random() * this.colors.length)]);
     return this;
