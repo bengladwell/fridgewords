@@ -31,6 +31,7 @@ var gulp = require('gulp'),
 
 gulp.task('jshint', function () {
   return gulp.src(['src/js/**/*.js', '!src/js/templates/**/*.js'])
+    .pipe(plumber())
     // allow console.log / debugger statements by using NODE_ENV=development
     .pipe(jshint(process.env.NODE_ENV === 'development' ? {devel: true, debug: true} : {}))
     // jshint-stylish not `require`d above, but has been installed with `npm install --save-dev jshint-stylish`
@@ -99,10 +100,10 @@ gulp.task('browserify-no-templates', ['jshint'], function () {
 // destination is tmp/ because only our test runner needs access to those files
 gulp.task('tests', function () {
   return gulp.src([ 'src/js/tests/**/*.js' ])
+    .pipe(plumber())
     .pipe(jshint({devel: true, debug: true}))
     .pipe(jshint.reporter('jshint-stylish'))
     .pipe(jshint.reporter('fail'))
-    .pipe(plumber())
     .pipe(transform(function (f) {
       return browserify({
         entries: f,
