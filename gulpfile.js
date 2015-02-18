@@ -29,6 +29,8 @@ var _ = require('underscore'),
 
   jshint = require('gulp-jshint'),
 
+  sourcemaps = require('gulp-sourcemaps'),
+
   // keep stream error events from killing our watch task
   plumber = require('gulp-plumber'),
 
@@ -51,11 +53,19 @@ gulp.task('jshint', function () {
 
 gulp.task('less', function () {
   return gulp.src('src/less/app.less')
-    .pipe(plumber())
+    .pipe(plumber({
+      errorHandler: function (err) {
+        util.log(util.colors.red(err));
+        this.emit('end');
+      }
+    }))
+    .pipe(sourcemaps.init())
     .pipe(less({
       // look in bootstrap's less directory when processing @import statements
-      paths: [ 'bower_components/bootstrap/less/' ]
+      paths: [ 'bower_components/bootstrap/less/' ],
+      compress: process.env.NODE_ENV !== 'development'
     }))
+    .pipe(sourcemaps.write())
     .pipe(gulp.dest('public/css/'));
 });
 
@@ -87,7 +97,7 @@ gulp.task('browserify', ['jshint', 'templates'], function () {
 
 // this is a duplicate of the browserify task above (development version), simply without the templates dependency;
 // we're doing this to avoid running the templates task twice every time an hbs file changes in the watch task;
-// it seems like there should be a better way to handle this :)
+// this isn't needed for the watchify task
 gulp.task('browserify-no-templates', ['jshint'], function () {
   return gulp.src(['src/js/app.js'])
     .pipe(plumber())
@@ -145,8 +155,11 @@ gulp.task('bower', ['vendor'], function () {
   // bower.json to determine which main file to use;
   // bower.json has been setup with overrides to use the minified version for production, non-minified
   // for development (see bower.json)
+  var isDev = process.env.NODE_ENV === 'development';
   gulp.src(mbf().filter(function (f) { return f.substr(-2) === 'js'; }))
-    .pipe(concat(process.env.NODE_ENV === 'development' ? 'vendor.js' : 'vendor.min.js'))
+    .pipe(isDev ? sourcemaps.init() : util.noop())
+    .pipe(concat(isDev ? 'vendor.js' : 'vendor.min.js'))
+    .pipe(isDev ? sourcemaps.write() : util.noop())
     .pipe(gulp.dest('public/js/'));
 });
 
