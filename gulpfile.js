@@ -68,27 +68,21 @@ gulp.task('templates', function () {
 });
 
 gulp.task('browserify', ['jshint', 'templates'], function () {
-  if (process.env.NODE_ENV === 'development') {
-    // for NODE_ENV=development, add sourcemaps, don't minify
-    return gulp.src(['src/js/app.js'])
-      .pipe(plumber())
-      .pipe(transform(function (f) {
-        return browserify({
-          entries: f,
-          // sourcemaps for free!
-          debug: true
-        }).bundle();
-      }))
-      .pipe(gulp.dest('public/js/'));
-  }
+  var isDev = process.env.NODE_ENV === 'development';
 
-  // else not development; minify
+  // for NODE_ENV=development, add sourcemaps, don't minify
   return gulp.src(['src/js/app.js'])
+    .pipe(plumber())
     .pipe(transform(function (f) {
-      return browserify(f).bundle();
+      return browserify({
+        entries: f,
+        // sourcemaps for free!
+        debug: isDev
+      }).bundle();
     }))
-    .pipe(uglify())
+    .pipe(isDev ? util.noop() : uglify()) // util.noop() simply passes through whatever is sent to it
     .pipe(gulp.dest('public/js/'));
+
 });
 
 // this is a duplicate of the browserify task above (development version), simply without the templates dependency;
