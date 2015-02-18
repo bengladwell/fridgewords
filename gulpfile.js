@@ -1,6 +1,9 @@
+/*jshint node:true*/
 "use strict";
 
-var gulp = require('gulp'),
+var _ = require('underscore'),
+  path = require('path'),
+  gulp = require('gulp'),
   concat = require('gulp-concat'),
 
   // used to get a list of the "main" files listed in each bower component's
@@ -27,7 +30,14 @@ var gulp = require('gulp'),
   jshint = require('gulp-jshint'),
 
   // keep stream error events from killing our watch task
-  plumber = require('gulp-plumber');
+  plumber = require('gulp-plumber'),
+
+  // stuff needed for our watchify task
+  map = require('map-stream'),
+  source = require('vinyl-source-stream'),
+  glob = require('glob'),
+
+  util = require('gulp-util');
 
 gulp.task('jshint', function () {
   return gulp.src(['src/js/**/*.js', '!src/js/templates/**/*.js'])
@@ -154,6 +164,83 @@ gulp.task('watch', ['browserify', 'less', 'tests'], function () {
   gulp.watch('src/hbs/**/*.hbs', [ 'templates' ]);
   livereload.listen();
   gulp.watch('public/**').on('change', livereload.changed);
+});
+
+// a much faster and much more complicated approach to auto rebuild and live reload using watchify;
+// only those test files that actually have changed dependencies will be rebuilt and reloaded;
+// Note: builds are not actually interrupted on jshint errors
+gulp.task('watchify', ['templates', 'less', 'jshint'], function () {
+  var watchify = require('watchify'),
+    lintFiles = function (files) {
+      gulp.src(files)
+        .pipe(map(function (file, cb) {
+          if (file.path.match(/src\/js\/templates\//)) {
+            cb();
+          } else {
+            cb(null, file);
+          }
+        }))
+        .pipe(jshint({devel: true, debug: true}))
+        .pipe(jshint.reporter('jshint-stylish'))
+        .pipe(map(function (file, cb) {
+          if (!file.jshint.success) {
+            util.beep();
+          }
+          cb(null, file);
+        }));
+    };
+
+  gulp.watch('src/less/**/*.less', [ 'less' ]);
+  gulp.watch('src/hbs/**/*.hbs', [ 'templates' ]);
+
+  _.each(['src/js/app.js'], function (entry) {
+    var bundler = watchify(browserify({
+      entries: path.join(__dirname, entry),
+      debug: true,
+      cache: {},
+      packageCache: {},
+      fullPaths: true
+    })),
+      update = function (files) {
+        if (files) {
+          lintFiles(files);
+        }
+        util.log(util.colors.blue(entry) + ' was bundled.');
+        return bundler.bundle()
+          .on('error', util.log.bind(util, 'Browserify Error'))
+          .pipe(source(path.basename(entry)))
+          .pipe(gulp.dest('public/js/'));
+      };
+    bundler.on('update', update);
+    update();
+  });
+
+  _.each(glob.sync('src/js/tests/unit/**/*.js'), function (entry) {
+    var bundler = watchify(browserify({
+      entries: path.join(__dirname, entry),
+      debug: true,
+      cache: {},
+      packageCache: {},
+      fullPaths: true
+    })),
+      update = function (files) {
+        var f = entry.match(/^src\/js\/tests\/unit\/(.+)$/);
+        if (files) {
+          lintFiles(files);
+        }
+        util.log(util.colors.blue('src/js/tests/unit/' + f[1]) + ' was bundled.');
+        return bundler.bundle()
+          .on('error', util.log.bind(util, 'Browserify Error'))
+          .pipe(source(f[1]))
+          .pipe(gulp.dest('tmp/'));
+      };
+    bundler.on('update', update);
+    update();
+  });
+
+  livereload.listen();
+  gulp.watch('public/**').on('change', livereload.changed);
+
 });
 
 // the tasks below have dependent tasks; these three parent tasks should kick off everything we need to build
